@@ -1,4 +1,5 @@
 var express = require('express');
+const stream = require('stream');
 const fs = require('fs');
 
 var router = express.Router();
@@ -11,20 +12,24 @@ router.post('/', async function(req, res, next) {
 	switch(req.body.case) {
 		case 'valid_multi':
 
-			if(!fs.existsSync('downloadDirectory/사업자_진위_여부_양식.xlsx')) {
-				sheet.columns = [
-					{header: 'No.', key: 'number'},
-					{header: '사업자 번호', key: 'businessNumber', width: 15, style: {alignment: {horizontal: 'center'}}},
-					{header: '대표명', key: 'representative', style: {alignment: {horizontal: 'center'}}},
-					{header: '사업 개시일', key: 'startDate', width: 12, style: {alignment: {horizontal: 'center'}}},
-				]
+			//	make file buffer
+			let fileBuffer;
+			sheet.columns = [
+				{header: 'No.', key: 'number'},
+				{header: '사업자 번호', key: 'businessNumber', width: 15, style: {alignment: {horizontal: 'center'}}},
+				{header: '대표명', key: 'representative', style: {alignment: {horizontal: 'center'}}},
+				{header: '사업 개시일', key: 'startDate', width: 12, style: {alignment: {horizontal: 'center'}}},
+			]
+			sheet.addRow({number: 1, businessNumber: '111223333', representative: '홍길동', startDate: '20230101'})
+			fileBuffer = await workbook.xlsx.writeBuffer();
 
-				sheet.addRow({number: 1, businessNumber: '111223333', representative: '홍길동', startDate: '20230101'})
+			const readStream = new stream.PassThrough();
+			readStream.end(fileBuffer)
 
-				await workbook.xlsx.writeFile('downloadDirectory/사업자_진위_여부_양식.xlsx')
-			}
+			res.set('Content-disposition', 'attachment; filename=' + '사업자_진위_여부_양식.xlsx');
+			res.set('Content-Type', 'text/plain');
 
-			res.download('downloadDirectory/사업자_진위_여부_양식.xlsx');
+			readStream.pipe(res);
 			break;
 		case 'state_multi':
 			break;
