@@ -16,3 +16,19 @@ const doStyleOnSingleSelected = () => {
 }
 
 document.getElementById('validSingleBtn').addEventListener('click', doStyleOnSingleSelected)
+
+const reqAPIBtn = document.getElementById('reqAPIBtn');
+reqAPIBtn.addEventListener('click', () => {
+	const form = document.getElementById('reqAPIForm');
+
+	if(form.businessNumber.value === '' || form.representative.value === '' || form.startDate.value === '') {
+		if(form.businessNumber.value === '')
+			alert('사업자 번호를 입력 해 주세요.')
+		else if(form.representative.value === '')
+			alert('대표명을 입력 해 주세요.')
+		else if(form.startDate.value === '')
+			alert('사업 개시일을 입력 해 주세요.')
+	} else {
+		form.submit();
+	}
+})

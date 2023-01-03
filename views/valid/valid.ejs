@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <button id='validSingleBtn'>일반 조회</button>
 <button id='validMultiBtn'>대량 조회</button>
+
 <div id='validSingleSearch'>
 <%- include('./singleSearch.ejs') %>
 </div>
@@ -8,7 +9,10 @@
 <%- include('./multiSearch.ejs') %>
 </div>
 
-<button>조회하기</button>
+<button id="reqAPIBtn">조회하기</button>
+<form id="reqAPIForm" action="/apiRequest" method="POST">
+	<input id="whatToDo" type="hidden" name="whatToDo" value=""></input>
+</form>
 
 <button id='validSingleBtn_'></button>
 <button id='validMultiBtn_'></button>

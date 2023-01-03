@@ -4,4 +4,5 @@ globalThis.onload = () => {
 	hiddenElements.forEach(ele => document.getElementById(ele).style.visibility = 'hidden')
 
 	document.getElementById('validMultiBtn').style.opacity = 0.3;
+	document.getElementById('whatToDo').value = 'valid_single';
 }
