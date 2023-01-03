@@ -1,4 +1,4 @@
-//	do style on selected
+//	do style on mode selected
 const doStyleOnMultiSelected = () => {
 	const validSingleBtn = document.getElementById('validSingleBtn');
 	validSingleBtn.style.opacity = 0.3;
@@ -16,3 +16,6 @@ const doStyleOnMultiSelected = () => {
 }
 
 document.getElementById('validMultiBtn').addEventListener('click', doStyleOnMultiSelected)
+
+//	trigger router to download form
+document.querySelector('#validMultiSearch > button:nth-child(1)').style.color = 'red';

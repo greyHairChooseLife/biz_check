@@ -1,3 +1,9 @@
 <!DOCTYPE html>
-<button>파일 선택</button>
-<button>양식 받기</button>
+<form action="" method="GET">
+	<input type="hidden" name="case" value="valid_multi"></input>
+	<button type="submit">파일 선택</button>
+</form>
+<form action="/downloadForm" method="POST">
+	<input type="hidden" name="case" value="valid_multi"></input>
+	<button type="submit">양식 받기</button>
+</form>

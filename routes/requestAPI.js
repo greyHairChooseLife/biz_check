@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
 //		]
 //	}
 //
+
 	switch(req.body.whatToDo) {
 		case 'valid_single':
 			method = 'validate';
@@ -62,7 +63,6 @@ router.post('/', async (req, res) => {
 			}
 
 			res.render('apiResult', props)
-			
 			break;
 		case 'valid_multi':
 			method = 'validate';
