@@ -9,9 +9,8 @@ router.post('/', async function(req, res, next) {
 	const workbook = new ExcelJS.Workbook();
 	const sheet = workbook.addWorksheet('1');
 
-	switch(req.body.case) {
+	switch(req.body.formCase) {
 		case 'valid_multi':
-
 			//	make file buffer
 			let fileBuffer;
 			sheet.columns = [
@@ -26,11 +25,12 @@ router.post('/', async function(req, res, next) {
 			const readStream = new stream.PassThrough();
 			readStream.end(fileBuffer)
 
-			res.set('Content-disposition', 'attachment; filename=' + '사업자_진위_여부_양식.xlsx');
+			res.set('Content-disposition', 'attachment; filename=' + encodeURI('사업자_진위_여부_양식.xlsx'));
 			res.set('Content-Type', 'text/plain');
 
 			readStream.pipe(res);
 			break;
+
 		case 'state_multi':
 			break;
 	}

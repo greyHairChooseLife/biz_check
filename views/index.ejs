@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>사업자 등록정보 확인 서비스</title>
+		<title>사업자 진위 여부 확인 서비스</title>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 	</head>
 
 	<body>
+
 		<div id="content">
 			<div>본 사이트는 <img src="/images/ntsLogo.png"></img>국세청 open api를 통해 정보를 제공합니다.</div>
 			<button>사업자 진위 여부 조회</button>
@@ -17,14 +18,16 @@
 				<%- include('./state/state.ejs') %>
 			</div>
 		</div>
+
 		<div id="advertizing">
 			<p>ad soon</p>
 		</div>
+
 		<div id="contact">
 			<p>제작자 문의</p>
 		</div>
+
 		<script src='/javascripts/defaultState.js'></script>
-		<script src='/javascripts/validMultiSearch.js'></script>
-		<script src='/javascripts/validSingleSearch.js'></script>
+		<script src='/javascripts/valid.js'></script>
 	</body>
 </html>
