@@ -6,7 +6,7 @@ const axios = require('axios');
 const multer = require('multer');
 const upload = multer({ 
 	//dest: 'userUpload'
-	storage: multer.memoryStorage()
+	storage: multer.memoryStorage()		//	no need to use server storage
 })
 
 const url = `https://api.odcloud.kr/api/nts-businessman/v1/`;
@@ -82,15 +82,32 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 		)
 	})
 
-
 	let result;
-	try{
+	if(postData.businesses.length <= 100) {
 		result = await axios.post(path, postData, headerOptions);
-	}catch(err){
+		result = result.data.data
 	}
-	result = result.data.data
+	else 	//	API RULE : less than 100 args at a time
+	{
+		result = [];
+		const postDataArray = [];
+		for(let i = 0; i < postData.businesses.length; i += 100) {
+			postDataArray.push(postData.businesses.slice(i, i +100))
+		}
 
-	res.send(result)
+		for await (const box of postDataArray) {
+			postData.businesses = box;
+			result.push(await axios.post(path, postData, headerOptions));
+		}
+
+		//	now iterate result to set each result : meaning from jsonData to exceljs file making
+
+		console.log(result[0].data.data)
+		console.log(result[2].data.data)
+	}
+
+
+	res.send('fine')
 })
 
 //		case 'valid_multi':
