@@ -82,10 +82,25 @@ reqAPIBtn.addEventListener('click', () => {
 			break;
 
 		case baseUrl + '/apiRequest/multi':
-			requestForm.submit();
+			if(!isOverLimit) requestForm.submit();
 			break;
 		default:
 			console.log('action href is NOT defined')
 			console.log('form: ', requestForm)
 	}
 })
+
+
+//////////////////////////////
+////////////////////////////// 		LIMIT UPLOAD SIZE : TO AVOID ERROR(OUT OF MEMORY) SINCE IT IS USING BUFFER
+//////////////////////////////
+//////////////////////////////
+
+let isOverLimit = false;
+document.getElementById('fileInput').addEventListener('change', function() {
+	if(this.files[0].size > 1_048_576){
+		alert("파일 크기는 최대 1MB 입니다.");
+		this.value = "";
+		isOverLimit = true;
+	};
+});

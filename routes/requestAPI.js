@@ -7,7 +7,8 @@ const axios = require('axios');
 const multer = require('multer');
 const upload = multer({ 
 	//dest: 'userUpload'
-	storage: multer.memoryStorage()		//	no need to use server storage so set it using buffer
+	storage: multer.memoryStorage(),		//	no need to use server storage so set it using buffer
+	limits: {fileSize: Number(process.env.MAX_UPLOAD_LIMIT)}
 })
 
 const url = `https://api.odcloud.kr/api/nts-businessman/v1/`;
