@@ -7,7 +7,7 @@ const axios = require('axios');
 const multer = require('multer');
 const upload = multer({ 
 	//dest: 'userUpload'
-	storage: multer.memoryStorage()		//	no need to use server storage
+	storage: multer.memoryStorage()		//	no need to use server storage so set it using buffer
 })
 
 const url = `https://api.odcloud.kr/api/nts-businessman/v1/`;
@@ -45,8 +45,8 @@ router.post('/single', async (req, res) => {
 			tax_type_cd: result[0].status?.tax_type_cd,
 			tax_type_change_dt: result[0].status?.tax_type_change_dt,
 			invoice_apply_dt: result[0].status?.invoice_apply_dt,
-			utcc_yn: result[0].status?.utcc_yn,
 			end_dt: result[0].status?.end_dt,
+			utcc_yn: result[0].status?.utcc_yn,
 		}
 
 	}
@@ -65,7 +65,7 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	const readingWB = await new Excel.Workbook().xlsx.load(req.file.buffer);
 	const readingSheet = readingWB.getWorksheet(1);	//	it gets first sheet
 
-	//	read each row, sanitize & validate to set arguments for api call
+	//	read each row, validate & sanitize to set arguments for api call
 	readingSheet.eachRow((row, rowNumber) => {
 		if(rowNumber === 1) return;	//	it refer header column
 		//	get net proper arguments after sanitizing and validating
@@ -78,6 +78,26 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 		)
 	})
 
+	const writingWB = new Excel.Workbook();
+	const writingSheet = writingWB.addWorksheet('result');
+	//	set header columns
+	writingSheet.columns = [
+		//	these headers below get data from reading sheet
+		{header: 'No.', key: 'number'},
+		{header: '사업자 번호', key: 'businessNumber', width: 15, style: {alignment: {horizontal: 'center'}}},
+		{header: '대표명', key: 'representative', style: {alignment: {horizontal: 'center'}}},
+		{header: '사업 개시일', key: 'startDate', width: 12, style: {alignment: {horizontal: 'center'}}},
+		//	these headers below get data from API call
+		{header: '진위여부', key: 'valid', style: {alignment: {horizontal: 'center'}}},
+		{header: '납세자 상태', key: 'b_stt', width: 12, style: {alignment: {horizontal: 'center'}}},
+		{header: '과세 유형', key: 'tax_type', width: 21, style: {alignment: {horizontal: 'center'}}},
+		{header: '과세유형 코드', key: 'tax_type_cd', width: 13, style: {alignment: {horizontal: 'center'}}},
+		{header: '최근 과세유형 전환 일자', key: 'tax_type_change_dt', width: 22, style: {alignment: {horizontal: 'center'}}},
+		{header: '세금계산서 적용일자', key: 'invoice_apply_dt', width: 20, style: {alignment: {horizontal: 'center'}}},
+		{header: '폐업일', key: 'end_dt', style: {alignment: {horizontal: 'center'}}},
+		{header: '단위과세전환 폐업 여부(Y,N)', key: 'utcc_yn', width: 25, style: {alignment: {horizontal: 'center'}}},
+	]
+
 	let result;
 	if(postData.businesses.length <= 100) {
 		result = await axios.post(path, postData, headerOptions);
@@ -87,26 +107,52 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	{
 		result = [];
 		const postDataArray = [];
+		//	slice post data
 		for(let i = 0; i < postData.businesses.length; i += 100) {
 			postDataArray.push(postData.businesses.slice(i, i +100))
 		}
 
+		//	async api call and gather results
 		for await (const box of postDataArray) {
 			postData.businesses = box;
-			result.push(await axios.post(path, postData, headerOptions));
+			const apiResult = await axios.post(path, postData, headerOptions);
+			result.push(...apiResult.data.data);
 		}
-
-		const writingWB = new Excel.Workbook();
-		const writingSheet = writingWB.addWorksheet('result');
-
-		//	now iterate result to set each result : meaning from jsonData to exceljs file making
-
-		console.log(result[0].data.data)
-		console.log(result[2].data.data)
 	}
 
+	const rows = [];	//	rows that are added into final result file
+	readingSheet.eachRow((row, rowNumber) => {
+		if(rowNumber === 1) return;	//	it refers header column
 
-	res.send(result)
+		//	from reading sheet
+		const newRow = [...row.values];
+		newRow.shift();	//	remove trash value
+
+		//	from API call
+		newRow.push(
+			result[rowNumber-2].valid === '01' ? '확인' : '미확인',
+			result[rowNumber-2].status?.b_stt,
+			result[rowNumber-2].status?.tax_type,
+			result[rowNumber-2].status?.tax_type_cd,
+			result[rowNumber-2].status?.tax_type_change_dt,
+			result[rowNumber-2].status?.invoice_apply_dt,
+			result[rowNumber-2].status?.end_dt,
+			result[rowNumber-2].status?.utcc_yn,
+		)
+
+		rows.push(newRow);
+	})
+
+	writingSheet.addRows(rows)
+
+	const fileBuffer = await writingWB.xlsx.writeBuffer();
+	const readStream = new stream.PassThrough();
+	readStream.end(fileBuffer)
+
+	res.set('Content-disposition', 'attachment; filename=' + encodeURI('사업자_진위_여부_조회결과.xlsx'));
+	res.set('Content-Type', 'text/plain');
+
+	readStream.pipe(res);
 })
 
 //		case 'valid_multi':
