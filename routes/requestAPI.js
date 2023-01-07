@@ -66,9 +66,18 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	const readingSheet = readingWB.getWorksheet(1);	//	it gets first sheet
 
 	//	read each row, validate & sanitize to set arguments for api call
+	//	if something wrong then save them to feed back to user
+	const wrongArgvRowNumberArr = [];
 	readingSheet.eachRow((row, rowNumber) => {
 		if(rowNumber === 1) return;	//	it refer header column
 		//	get net proper arguments after sanitizing and validating
+		if(row.values[2] === undefined
+			|| row.values[2] === undefined
+			|| row.values[2] === undefined
+			|| String(row.values[2]).replaceAll(' ', '').length < 1
+			|| String(row.values[3]).replaceAll(' ', '').length < 1
+			|| String(row.values[4]).replaceAll(' ', '').length < 1) wrongArgvRowNumberArr.push(rowNumber)
+
 		postData.businesses.push(
 			{
 				b_no: String(row.values[2]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[2]).replaceAll(' ', ''),
@@ -144,6 +153,24 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	})
 
 	writingSheet.addRows(rows)
+
+	//	styling to feed back to user what were wrong
+	writingSheet.eachRow((row, rowNumber) => {
+		if(wrongArgvRowNumberArr.includes(rowNumber))
+			for(let i = 2; i<=4; i++) {
+				row.getCell(i).fill = {
+					type: 'pattern',
+					pattern: 'solid',
+					fgColor: {argb:'F08080'},
+				}
+				row.getCell(i).border = {
+					top: {style:'hair', color: {argb: 'd3d3d3'}},
+					left: {style:'hair', color: {argb: 'd3d3d3'}},
+					bottom: {style:'hair', color: {argb: 'd3d3d3'}},
+					right: {style:'hair', color: {argb: 'd3d3d3'}}
+				}
+			}
+	})
 
 	const fileBuffer = await writingWB.xlsx.writeBuffer();
 	const readStream = new stream.PassThrough();
