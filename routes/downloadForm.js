@@ -17,8 +17,18 @@ router.post('/', async function(req, res, next) {
 				{header: '사업자 번호', key: 'businessNumber', width: 15, style: {alignment: {horizontal: 'center'}}},
 				{header: '대표명', key: 'representative', style: {alignment: {horizontal: 'center'}}},
 				{header: '사업 개시일', key: 'startDate', width: 12, style: {alignment: {horizontal: 'center'}}},
+				{},
+				{},
+				{width: 80}
 			]
 			sheet.addRow({number: 1, businessNumber: '111223333', representative: '홍길동', startDate: '20230101'})
+			sheet.addRows([[], [], [], 
+				[undefined, undefined, undefined, undefined, undefined, undefined, '안내 1 : 파일 사이즈는 최대 1mb입니다.'],		//	info msg 1
+				[],
+				[undefined, undefined, undefined, undefined, undefined, undefined, '안내 2 : 사업자 번호, 사업 개시일은 예시와 같이 숫자만 써 주세요.'],		//	info msg 2
+				[],
+				[undefined, undefined, undefined, undefined, undefined, undefined, '안내 3 : 잘못된 인자(사업자 번호, 대표명, 사업 개시일)는 붉은 배경으로 표시됩니다.'],		//	info msg 2
+			])
 			fileBuffer = await workbook.xlsx.writeBuffer();
 
 			const readStream = new stream.PassThrough();
