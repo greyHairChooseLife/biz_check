@@ -1,6 +1,5 @@
 var express = require('express');
 const stream = require('stream');
-const fs = require('fs');
 
 var router = express.Router();
 

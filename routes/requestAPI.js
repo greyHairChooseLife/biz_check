@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 require('dotenv').config();
 const Excel = require('exceljs');
+const stream = require('stream');
 const axios = require('axios');
 const multer = require('multer');
 const upload = multer({ 
@@ -61,23 +62,18 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 		]
 	}
 
-	const wb = await new Excel.Workbook().xlsx.load(req.file.buffer);
-	const sheet = wb.getWorksheet('1');
+	const readingWB = await new Excel.Workbook().xlsx.load(req.file.buffer);
+	const readingSheet = readingWB.getWorksheet(1);	//	it gets first sheet
 
-	//	read reach row, sanitize & validate to set arguments for api call
-	sheet.eachRow((row, rowNumber) => {
+	//	read each row, sanitize & validate to set arguments for api call
+	readingSheet.eachRow((row, rowNumber) => {
 		if(rowNumber === 1) return;	//	it refer header column
-		//	sanitize and validate
-		if(String(row.values[2]).replaceAll(' ', '').length < 1) return
-		if(String(row.values[3]).replaceAll(' ', '').length < 1) return
-		if(String(row.values[4]).replaceAll(' ', '').length < 1) return
-
-		//	net proper arguments 
+		//	get net proper arguments after sanitizing and validating
 		postData.businesses.push(
 			{
-				b_no: String(row.values[2]).replaceAll(' ', ''),
-				p_nm: String(row.values[3]).replaceAll(' ', ''),
-				start_dt: String(row.values[4]).replaceAll(' ', ''),
+				b_no: String(row.values[2]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[2]).replaceAll(' ', ''),
+				p_nm: String(row.values[3]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[3]).replaceAll(' ', ''),
+				start_dt: String(row.values[4]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[4]).replaceAll(' ', ''),
 			}
 		)
 	})
@@ -100,6 +96,9 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 			result.push(await axios.post(path, postData, headerOptions));
 		}
 
+		const writingWB = new Excel.Workbook();
+		const writingSheet = writingWB.addWorksheet('result');
+
 		//	now iterate result to set each result : meaning from jsonData to exceljs file making
 
 		console.log(result[0].data.data)
@@ -107,7 +106,7 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	}
 
 
-	res.send('fine')
+	res.send(result)
 })
 
 //		case 'valid_multi':
