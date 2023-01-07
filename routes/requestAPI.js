@@ -125,7 +125,7 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 		if(rowNumber === 1) return;	//	it refers header column
 
 		//	from reading sheet
-		const newRow = [...row.values];
+		const newRow = [row.values[0], row.values[1], row.values[2], row.values[3], row.values[4]];
 		newRow.shift();	//	remove trash value
 
 		//	from API call
