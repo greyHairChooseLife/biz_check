@@ -25,12 +25,19 @@ let path, method, postData;
 router.post('/single', async (req, res) => {
 	method = 'validate';
 	path = url + method + auth;
+	let {businessNumber: b_no, representative: p_nm, startDate: start_dt} = req.body;
+
+	//	valiate
+	!isValid(b_no, 2) && (b_no = '10자리 숫자가 아닙니다.')
+	!isValid(p_nm, 3) && (p_nm = '이름을 써 주세요.')
+	!isValid(start_dt, 4) && (start_dt = '8자리 숫자가 아닙니다.')
+
 	postData = {
 		businesses: [
 			{
-				b_no: req.body.businessNumber,
-				p_nm: req.body.representative,
-				start_dt: req.body.startDate
+				b_no: b_no,
+				p_nm: p_nm,
+				start_dt: start_dt
 			}
 		]
 	}
