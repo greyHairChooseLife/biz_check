@@ -11,6 +11,8 @@ const upload = multer({
 	limits: {fileSize: Number(process.env.MAX_UPLOAD_LIMIT)}
 })
 
+const { isValid, isEmpty } = require('./myModules/validator');
+
 const url = `https://api.odcloud.kr/api/nts-businessman/v1/`;
 const auth = `?serviceKey=${process.env.API_KEY}`;
 const headerOptions = {
@@ -72,18 +74,16 @@ router.post('/multi', upload.single('selectedFile'), async (req, res) => {
 	readingSheet.eachRow((row, rowNumber) => {
 		if(rowNumber === 1) return;	//	it refer header column
 		//	get net proper arguments after sanitizing and validating
-		if(row.values[2] === undefined
-			|| row.values[2] === undefined
-			|| row.values[2] === undefined
-			|| String(row.values[2]).replaceAll(' ', '').length < 1
-			|| String(row.values[3]).replaceAll(' ', '').length < 1
-			|| String(row.values[4]).replaceAll(' ', '').length < 1) wrongArgvRowNumberArr.push(rowNumber)
+		if(!isValid(row.values[2], 2)
+			|| !isValid(row.values[3], 3)
+			|| !isValid(row.values[4], 4)
+		) wrongArgvRowNumberArr.push(rowNumber)
 
 		postData.businesses.push(
 			{
-				b_no: String(row.values[2]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[2]).replaceAll(' ', ''),
-				p_nm: String(row.values[3]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[3]).replaceAll(' ', ''),
-				start_dt: String(row.values[4]).replaceAll(' ', '').length < 1 ? 'undefined' : String(row.values[4]).replaceAll(' ', ''),
+				b_no:  isEmpty(row.values[2]) ? 'undefined' : String(row.values[2]),
+				p_nm:  isEmpty(row.values[3]) ? 'undefined' : String(row.values[3]),
+				start_dt: isEmpty(row.values[4]) ? 'undefined' : String(row.values[4]),
 			}
 		)
 	})
