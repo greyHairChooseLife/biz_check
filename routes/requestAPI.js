@@ -78,13 +78,27 @@ router.post('/valid_multi', upload.single('selectedFile'), async (req, res) => {
 	//	read each row, validate & sanitize to set arguments for api call
 	//	if something wrong then save them to feed back to user
 	const wrongArgvRowNumberArr = [];
+	let emptyRow = 0;
 	readingSheet.eachRow((row, rowNumber) => {
+		emptyRow++;
 		if(rowNumber === 1) return;	//	it refer header column
 		//	get net proper arguments after sanitizing and validating
 		if(!isValid(row.values[2], 2)
 			|| !isValid(row.values[3], 3)
 			|| !isValid(row.values[4], 4)
 		) wrongArgvRowNumberArr.push(rowNumber)
+
+		//	빈 열은 rowNumber로 카운트 되지 않는다. 
+		while(rowNumber !== emptyRow) {
+			postData.businesses.push(
+				{
+					b_no: 'undefined',
+					p_nm: 'undefined',
+					start_dt: 'undefined',
+				}
+			)
+			wrongArgvRowNumberArr.push(emptyRow++);
+		}
 
 		postData.businesses.push(
 			{
