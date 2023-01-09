@@ -22,7 +22,7 @@ const headerOptions = {
 }
 let path, method, postData;
 
-router.post('/single', async (req, res) => {
+router.post('/valid_single', async (req, res) => {
 	method = 'validate';
 	path = url + method + auth;
 	let {businessNumber: b_no, representative: p_nm, startDate: start_dt} = req.body;
@@ -64,7 +64,7 @@ router.post('/single', async (req, res) => {
 	res.render('apiResult', props)
 })
 
-router.post('/multi', upload.single('selectedFile'), async (req, res) => {
+router.post('/valid_multi', upload.single('selectedFile'), async (req, res) => {
 	method = 'validate';
 	path = url + method + auth;
 	postData = {

@@ -44,12 +44,12 @@ const doStyleOnMultiSelected = () => {
 let requestForm = document.getElementById('reqAPIForm');
 document.getElementById('validSingleBtn').addEventListener('click', () => {
 	doStyleOnSingleSelected(); 	//	styling
-	requestForm.action = "/apiRequest/single";
+	requestForm.action = "/apiRequest/valid_single";
 	requestForm.encoding = ""
 })
 document.getElementById('validMultiBtn').addEventListener('click', () => {
 	doStyleOnMultiSelected();	//	styling
-	requestForm.action = "/apiRequest/multi";
+	requestForm.action = "/apiRequest/valid_multi";
 	requestForm.encoding = "multipart/form-data"
 })
 
@@ -64,11 +64,10 @@ reqAPIBtn.addEventListener('click', () => {
 	//	클라이언트에서 해 줄 일은 
 	//	1. validating, sanitizing
 	//	2. form.post를 submit (서버단에서 처리하고 res할 수 있도록)
+	const parsedURL = requestForm.action.split('/');
 
-	const baseUrl = "http://localhost:3000"
-
-	switch(requestForm.action) {
-		case baseUrl + '/apiRequest/single':
+	switch(parsedURL[parsedURL.length -1]) {
+		case 'valid_single':
 			if(requestForm.businessNumber.value === '' || requestForm.representative.value === '' || requestForm.startDate.value === '') {
 				if(requestForm.businessNumber.value === '')
 					alert('사업자 번호를 입력 해 주세요.')
@@ -81,7 +80,7 @@ reqAPIBtn.addEventListener('click', () => {
 			}
 			break;
 
-		case baseUrl + '/apiRequest/multi':
+		case 'valid_multi':
 			if(!isOverLimit) requestForm.submit();
 			break;
 		default:
