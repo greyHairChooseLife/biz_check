@@ -1,3 +1,27 @@
 <!DOCTYPE html>
-<div>
+<button id='stateSingleBtn'>일반 조회</button>
+<button id='stateMultiBtn'>대량 조회</button>
+
+<div id='stateSingleSearch'>
+	<p>사업자 번호</p>
+	<input type="text" placeholder="숫자만 입력하세요." name="businessNumber" form="reqAPIForm"></input>
 </div>
+
+<div id='stateMultiSearch'>
+    <label for="fileInput">파일찾기</label> 
+    <input class="filename" value="" placeholder="첨부파일">
+    <input type="file" id="fileInput" name="selectedFile" form="reqAPIForm" />
+
+	<form action="/downloadForm" method="POST">
+		<input type="hidden" name="formCase" value="state_multi" />
+		<button type="submit">양식 받기</button>
+	</form>
+	<p>
+	* 파일 사이즈는 최대 1mb입니다.<br>
+	* 사업자 번호는 예시와 같이 숫자만 써 주세요.<br>
+	* 잘못된 인자는 붉은 배경으로 표시됩니다.
+	</p>
+</div>
+
+<button id='stateSingleBtn_'></button>
+<button id='stateMultiBtn_'></button>

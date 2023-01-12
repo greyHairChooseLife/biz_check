@@ -4,7 +4,7 @@
 	--font-strong: black;
 	--font-normal: grey;
 	--font-weak: white;
-	--button-color: rgba(146,141,232, 0.3);
+	--button-color: rgba(106,179,250);
 	--quote-bg: rgba(146,141,232, 0.3);
 }
 
@@ -51,7 +51,7 @@ button {
 	top: 0.3vh;
 	height: 2.5vh;
 }
-#content > button {
+#validBtn {
 	width: 40%;
 	height: 10%;
 	background-color: var(--button-color);
@@ -59,13 +59,40 @@ button {
 	border: none;
 	border-radius: 10px;
 	box-sizing: border-box;
-	font-size: 1.2rem;
+	font-size: 2rem;
+	position: relative;
+	left: 7%;
+	top: 5%;
+}
+#stateBtn {
+	width: 40%;
+	height: 10%;
+	background-color: var(--button-color);
+	color: white;
+	border: none;
+	border-radius: 10px;
+	box-sizing: border-box;
+	font-size: 2rem;
 	position: relative;
 	left: 7%;
 	top: 5%;
 }
 #content > button:nth-of-type(2) {
 	left: 12%;
+}
+
+#reqAPIBtn {
+	position: absolute;
+	width: 20vw;
+	height: 10vh;
+	bottom: 10vh;
+	left: 42vw;
+	border-radius: 10px;
+	background-color: transparent;
+	border: solid 2px black;
+	outline: none;
+	box-sizing: border-box;
+	font-size: 2rem;
 }
 
 #advertizing > p {
@@ -113,16 +140,18 @@ button {
 #validSingleBtn_ {
 	position: absolute;
 	width: 40%;
-	left: 60%;
 	height: 40%;
+	left: 60%;
+	height: 0;
 	border: none;
 	border-top: solid 2px black;
 	background-color: transparent;
 	top: -30%;
-	font-size: 1.5rem;
 	box-sizing: border-box;
 	outline: none;
+	cursor: default;
 }
+
 /** #valid > button:nth-of-type(2) {	**/
 #validMultiBtn {
 	position: absolute;
@@ -140,7 +169,7 @@ button {
 	position: absolute;
 	width: 40%;
 	left: 20%;
-	height: 40%;
+	height: 0;
 	border: none;
 	border-top: solid 2px black;
 	background-color: transparent;
@@ -148,14 +177,7 @@ button {
 	font-size: 1.5rem;
 	box-sizing: border-box;
 	outline: none;
-}
-#valid > button:nth-of-type(3) {
-	position: absolute;
-	width: 80%;
-	height: 50%;
-	left: 20%;
-	top: 190%;
-	font-size: 2.0rem;
+	cursor: default;
 }
 
 #validSingleSearch {
@@ -175,30 +197,219 @@ button {
 	padding-left: 5%;
 	font-size: 1.3rem;
 }
-#validSingleSearch {
+
+
+#state {
+	position: relative;
+	height: 20%;
+	top: 30%;
+	width: 80%;
+	left: 2%;
+}
+/**	#state > button:nth-of-type(1) {	**/
+#stateSingleBtn {
+	position: absolute;
+	width: 40%;
+	left: 20%;
+	height: 40%;
+	border-left: none;
+	border-bottom: none;
+	background-color: white;
+	top: -70%;
+	font-size: 1.5rem;
+	box-sizing: border-box;
+	outline: none;
+}
+#stateSingleBtn_ {
+	position: absolute;
+	width: 40%;
+	left: 60%;
+	height: 40%;
+	border: none;
+	border-top: solid 2px black;
+	background-color: transparent;
+	top: -30%;
+	font-size: 1.5rem;
+	box-sizing: border-box;
+	outline: none;
+}
+/** #state > button:nth-of-type(2) {	**/
+#stateMultiBtn {
+	position: absolute;
+	width: 40%;
+	left: 60%;
+	height: 40%;
+	border: none;
+	background-color: white;
+	top: -70%;
+	font-size: 1.5rem;
+	box-sizing: border-box;
+	outline: none;
+}
+#stateMultiBtn_ {
+	position: absolute;
+	width: 40%;
+	left: 20%;
+	height: 40%;
+	border: none;
+	border-top: solid 2px black;
+	background-color: transparent;
+	top: -30%;
+	font-size: 1.5rem;
+	box-sizing: border-box;
+	outline: none;
 }
 
-#validMultiSearch {
+#stateSingleSearch {
+	display: grid;
+	grid-template-columns: 1fr 2fr; 
+}
+#stateSingleSearch p {
+	grid-column: 1/2;
+	text-align: center;
+	font-size: 1.2rem;
+	margin-left: 30%;
+}
+#stateSingleSearch input {
+	grid-column: 2/3;
+	height: 70%;
+	margin-top: 1%;
+	padding-left: 5%;
+	font-size: 1.3rem;
+}
+
+#stateMultiSearch {
 	position: relative;
 	left: 10%;
 	top: -80%;
 }
-#validMultiSearch > button:nth-of-type(1) {
+#stateMultiSearch > button:nth-of-type(1) {
 	position: relative;
 	width: 30%;
 	left: 15%;
 	height: 15vh;
 	font-size: 1.8rem;
 }
-#validMultiSearch > button:nth-of-type(2) {
+#stateMultiSearch > button:nth-of-type(2) {
 	position: relative;
 	width: 30%;
 	left: 25%;
 	height: 15vh;
 	font-size: 1.8rem;
 }
+
 #validMultiSearch {
+	position: absolute;
+	width: 50vw;
+	top: 2vh;
+	left: 12vw;
+	font-size: 1.3rem;
 }
+#validMultiSearch > p {
+	margin-top: 6vh;
+	line-height: 1.5;
+}
+#validMultiSearch > form > button{
+    display: inline-block;
+	border: solid 2px grey;
+	border-radius: 2px;
+	width: 8vw;
+	height: 5vh;
+	padding: 0;
+	box-sizing: border-box;
+	font-size: 1.5rem;
+	background-color: lightgrey;
+	margin-top: 2vh;
+}
+#validMultiSearch > input:nth-of-type(1) {
+    display: inline-block;
+    height: 5vh;
+	border: none;
+    color: grey;
+	font-size: 1.2rem;
+	padding-left: 2vw;
+	outline: none;
+	cursor: default;
+}
+#validMultiSearch > label {
+    display: inline-block;
+	border: solid 2px black;
+	border-radius: 2px;
+	width: 8vw;
+	height: 5vh;
+	padding: 0;
+	padding-top: 5px;
+	text-align: center;
+	box-sizing: border-box;
+	font-size: 1.5rem;
+	background-color: transparent;
+	cursor: pointer;
+}
+#validMultiSearch input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+#stateMultiSearch {
+	position: absolute;
+	width: 50vw;
+	top: 2vh;
+	left: 12vw;
+	font-size: 1.3rem;
+}
+#stateMultiSearch > p {
+	margin-top: 6vh;
+	line-height: 1.5;
+}
+#stateMultiSearch > form > button{
+    display: inline-block;
+	border: solid 2px grey;
+	border-radius: 2px;
+	width: 8vw;
+	height: 5vh;
+	padding: 0;
+	box-sizing: border-box;
+	font-size: 1.5rem;
+	background-color: lightgrey;
+	margin-top: 2vh;
+}
+#stateMultiSearch > input:nth-of-type(1) {
+    display: inline-block;
+    height: 5vh;
+	border: none;
+    color: grey;
+	font-size: 1.2rem;
+	padding-left: 2vw;
+	outline: none;
+	cursor: default;
+}
+#stateMultiSearch > label {
+    display: inline-block;
+	border: solid 2px black;
+	border-radius: 2px;
+	width: 8vw;
+	height: 5vh;
+	padding: 0;
+	padding-top: 5px;
+	text-align: center;
+	box-sizing: border-box;
+	font-size: 1.5rem;
+	background-color: transparent;
+	cursor: pointer;
+}
+#stateMultiSearch input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
 
 td {
 	padding-left: 2vw;
@@ -235,4 +446,8 @@ td {
 	box-sizing: border-box;
 	padding-left: 12vw;
 	font-size: 1.5rem;
+}
+
+.notSelected {
+	opacity: 0.3;
 }

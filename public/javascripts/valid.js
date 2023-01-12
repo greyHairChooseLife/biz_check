@@ -4,7 +4,7 @@
 ////////////////////////////// 
 
 //	category(menu) on selected
-const doStyleOnSingleSelected = () => {
+const doStyleOnSingleSelected_valid = () => {
 	const validMultiBtn = document.getElementById('validMultiBtn');
 	validMultiBtn.style.opacity = 0.3;
 	validMultiBtn.style.borderTop = 'none';
@@ -13,14 +13,14 @@ const doStyleOnSingleSelected = () => {
 	validSingleBtn.style.opacity = 1.0;
 	validSingleBtn.style.borderTop = 'solid 2px black';
 	validSingleBtn.style.borderRight = 'solid 2px black';
-	document.getElementById('validMultiBtn_').style.visibility = 'hidden';
 	document.getElementById('validSingleBtn_').style.visibility = 'visible';
+	document.getElementById('validMultiBtn_').style.visibility = 'hidden';
 
 	document.getElementById('validSingleSearch').style.visibility = 'visible';
 	document.getElementById('validMultiSearch').style.visibility = 'hidden';
 }
 
-const doStyleOnMultiSelected = () => {
+const doStyleOnMultiSelected_valid = () => {
 	const validSingleBtn = document.getElementById('validSingleBtn');
 	validSingleBtn.style.opacity = 0.3;
 	validSingleBtn.style.borderTop = 'none';
@@ -32,8 +32,8 @@ const doStyleOnMultiSelected = () => {
 	document.getElementById('validSingleBtn_').style.visibility = 'hidden';
 	document.getElementById('validMultiBtn_').style.visibility = 'visible';
 
-	document.getElementById('validMultiSearch').style.visibility = 'visible';
 	document.getElementById('validSingleSearch').style.visibility = 'hidden';
+	document.getElementById('validMultiSearch').style.visibility = 'visible';
 }
 
 ////////////////////////////// 
@@ -43,12 +43,12 @@ const doStyleOnMultiSelected = () => {
 
 let requestForm = document.getElementById('reqAPIForm');
 document.getElementById('validSingleBtn').addEventListener('click', () => {
-	doStyleOnSingleSelected(); 	//	styling
+	doStyleOnSingleSelected_valid(); 	//	styling
 	requestForm.action = "/apiRequest/valid_single";
 	requestForm.encoding = ""
 })
 document.getElementById('validMultiBtn').addEventListener('click', () => {
-	doStyleOnMultiSelected();	//	styling
+	doStyleOnMultiSelected_valid();	//	styling
 	requestForm.action = "/apiRequest/valid_multi";
 	requestForm.encoding = "multipart/form-data"
 })
