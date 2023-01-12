@@ -32,8 +32,8 @@ const doStyleOnMultiSelected_valid = () => {
 	document.getElementById('validSingleBtn_').style.visibility = 'hidden';
 	document.getElementById('validMultiBtn_').style.visibility = 'visible';
 
-	document.getElementById('validSingleSearch').style.visibility = 'hidden';
 	document.getElementById('validMultiSearch').style.visibility = 'visible';
+	document.getElementById('validSingleSearch').style.visibility = 'hidden';
 }
 
 ////////////////////////////// 
@@ -96,7 +96,7 @@ reqAPIBtn.addEventListener('click', () => {
 //////////////////////////////
 
 let isOverLimit = false;
-document.getElementById('fileInput').addEventListener('change', function() {
+document.getElementById('fileInput_valid').addEventListener('change', function() {
 	if(this.files[0].size > 1_048_576){
 		alert("파일 크기는 최대 1MB 입니다.");
 		this.value = "";

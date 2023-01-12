@@ -322,6 +322,7 @@ button {
 	margin-top: 2vh;
 }
 #validMultiSearch > input:nth-of-type(1) {
+	position: absolute;
     display: inline-block;
     height: 5vh;
 	border: none;
@@ -330,6 +331,7 @@ button {
 	padding-left: 2vw;
 	outline: none;
 	cursor: default;
+	width: 80%;
 }
 #validMultiSearch > label {
     display: inline-block;
@@ -378,6 +380,7 @@ button {
 	margin-top: 2vh;
 }
 #stateMultiSearch > input:nth-of-type(1) {
+	position: absolute;
     display: inline-block;
     height: 5vh;
 	border: none;
@@ -386,6 +389,7 @@ button {
 	padding-left: 2vw;
 	outline: none;
 	cursor: default;
+	width: 80%;
 }
 #stateMultiSearch > label {
     display: inline-block;

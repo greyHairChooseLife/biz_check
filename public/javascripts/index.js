@@ -16,3 +16,12 @@ stateBtn.addEventListener('click', () => {
 	document.getElementById('state').style.display = 'block';
 	document.getElementById('valid').style.display = 'none';
 })
+
+
+document.getElementById('fileInput_valid').addEventListener('change', () => {
+	document.getElementById('filename_valid').value = document.getElementById('fileInput_valid').value;
+})
+
+document.getElementById('fileInput_state').addEventListener('change', () => {
+	document.getElementById('filename_state').value = document.getElementById('fileInput_state').value;
+})

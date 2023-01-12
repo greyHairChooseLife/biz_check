@@ -88,7 +88,7 @@ reqAPIBtn.addEventListener('click', () => {
 //////////////////////////////
 //////////////////////////////
 
-document.getElementById('fileInput').addEventListener('change', function() {
+document.getElementById('fileInput_state').addEventListener('change', function() {
 	if(this.files[0].size > 1_048_576){
 		alert("파일 크기는 최대 1MB 입니다.");
 		this.value = "";
