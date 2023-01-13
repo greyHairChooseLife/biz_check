@@ -237,21 +237,125 @@ router.post('/state_single', async (req, res) => {
 	res.render('state/stateApiResult', props)
 })
 
+router.post('/state_multi', upload.single('selectedFile'), async (req, res) => {
+	method = 'status';
+	path = url + method + auth;
+	postData = {
+		b_no: [
+		]
+	}
 
-//		case 'valid_multi':
-//			console.log('ppp: ', req.body)
-//			break;
-//		case 'state_single':
-//			method = 'status';
-//			path = url + method + auth;
-//			break;
-//		case 'state_multi':
-//			method = 'status';
-//			path = url + method + auth;
-//			break;
-//		default :
-//			console.error('requestAPI 분기가 잘못되었습니다.')
-//			console.log(': ', req.body.whatToDo)
+	const readingWB = await new Excel.Workbook().xlsx.load(req.file.buffer);
+	const readingSheet = readingWB.getWorksheet(1);	//	it gets first sheet
 
+	//	read each row, stateate & sanitize to set arguments for api call
+	//	if something wrong then save them to feed back to user
+	const wrongArgvRowNumberArr = [];
+	let emptyRow = 0;
+	readingSheet.eachRow((row, rowNumber) => {
+		emptyRow++;
+		if(rowNumber === 1) return;	//	it refer header column
+		//	get net proper arguments after sanitizing and stateating
+		if(!isValid(row.values[2], 2))
+			wrongArgvRowNumberArr.push(rowNumber)
+
+		//	빈 열은 rowNumber로 카운트 되지 않는다. 
+		while(rowNumber !== emptyRow) {
+			postData.b_no.push('undefined')
+			wrongArgvRowNumberArr.push(emptyRow++);
+		}
+
+		postData.b_no.push( isEmpty(row.values[2]) ? 'undefined' : String(row.values[2]) )
+	})
+
+	const writingWB = new Excel.Workbook();
+	const writingSheet = writingWB.addWorksheet('result');
+	//	set header columns
+	writingSheet.columns = [
+		//	these headers below get data from reading sheet
+		{header: 'No.', key: 'number'},
+		{header: '사업자 번호', key: 'businessNumber', width: 15, style: {alignment: {horizontal: 'center'}}},
+		//	these headers below get data from API call
+		{header: '납세자 상태', key: 'b_stt', width: 12, style: {alignment: {horizontal: 'center'}}},
+		{header: '과세 유형', key: 'tax_type', width: 21, style: {alignment: {horizontal: 'center'}}},
+		{header: '과세유형 코드', key: 'tax_type_cd', width: 13, style: {alignment: {horizontal: 'center'}}},
+		{header: '최근 과세유형 전환 일자', key: 'tax_type_change_dt', width: 22, style: {alignment: {horizontal: 'center'}}},
+		{header: '세금계산서 적용일자', key: 'invoice_apply_dt', width: 20, style: {alignment: {horizontal: 'center'}}},
+		{header: '폐업일', key: 'end_dt', style: {alignment: {horizontal: 'center'}}},
+		{header: '단위과세전환 폐업 여부(Y,N)', key: 'utcc_yn', width: 25, style: {alignment: {horizontal: 'center'}}},
+	]
+
+	let result;
+	if(postData.b_no.length <= 100) {
+		result = await axios.post(path, postData, headerOptions);
+		result = result.data.data
+	}
+	else 	//	API RULE : less than 100 args at a time
+	{
+		result = [];
+		const postDataArray = [];
+		//	slice post data
+		for(let i = 0; i < postData.b_no.length; i += 100) {
+			postDataArray.push(postData.b_no.slice(i, i +100))
+		}
+
+		//	async api call and gather results
+		for await (const box of postDataArray) {
+			postData.b_no = box;
+			const apiResult = await axios.post(path, postData, headerOptions);
+			result.push(...apiResult.data.data);
+		}
+	}
+
+	const rows = [];	//	rows that are added into final result file
+	readingSheet.eachRow((row, rowNumber) => {
+		if(rowNumber === 1) return;	//	it refers header column
+
+		//	from reading sheet
+		const newRow = [row.values[0], row.values[1], row.values[2]];
+		newRow.shift();	//	remove trash value
+
+		//	from API call
+		newRow.push(
+			result[rowNumber-2]?.b_stt,
+			result[rowNumber-2]?.tax_type,
+			result[rowNumber-2]?.tax_type_cd,
+			result[rowNumber-2]?.tax_type_change_dt,
+			result[rowNumber-2]?.invoice_apply_dt,
+			result[rowNumber-2]?.end_dt,
+			result[rowNumber-2]?.utcc_yn,
+		)
+
+		rows.push(newRow);
+	})
+
+	writingSheet.addRows(rows)
+
+	//	styling to feed back to user what were wrong
+	writingSheet.eachRow((row, rowNumber) => {
+		if(wrongArgvRowNumberArr.includes(rowNumber)) {
+			row.getCell(2).fill = {
+				type: 'pattern',
+				pattern: 'solid',
+				fgColor: {argb:'F08080'},
+			}
+			row.getCell(2).border = {
+				top: {style:'hair', color: {argb: 'd3d3d3'}},
+				left: {style:'hair', color: {argb: 'd3d3d3'}},
+				bottom: {style:'hair', color: {argb: 'd3d3d3'}},
+				right: {style:'hair', color: {argb: 'd3d3d3'}}
+			}
+		}
+	})
+
+	const fileBuffer = await writingWB.xlsx.writeBuffer();
+	const readStream = new stream.PassThrough();
+	readStream.end(fileBuffer)
+
+	res.set('Content-disposition', 'attachment; filename=' + encodeURI('사업자_진위_여부_조회결과.xlsx'));
+	res.set('Content-Type', 'text/plain');
+
+	readStream.pipe(res);
+})
 
 module.exports = router; 
