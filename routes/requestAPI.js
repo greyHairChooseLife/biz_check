@@ -61,7 +61,7 @@ router.post('/valid_single', async (req, res) => {
 
 	}
 
-	res.render('apiResult', props)
+	res.render('valid/validApiResult', props)
 })
 
 router.post('/valid_multi', upload.single('selectedFile'), async (req, res) => {
@@ -203,6 +203,40 @@ router.post('/valid_multi', upload.single('selectedFile'), async (req, res) => {
 
 	readStream.pipe(res);
 })
+
+router.post('/state_single', async (req, res) => {
+	method = 'status';
+	path = url + method + auth;
+	let {businessNumber_state: b_no} = req.body;
+
+	//	valiate
+	!isValid(b_no, 2) && (b_no = '10자리 숫자가 아닙니다.')
+
+	postData = {
+		b_no: [
+			b_no
+		]
+	}
+	let result = await axios.post(path, postData, headerOptions);
+
+	result = result.data.data
+	const props = {
+		params: result[0].b_no,
+		isRegistered: result[0].tax_type_cd === '' ? result[0].tax_type : '등록 된 사업자입니다.',
+		result: {
+			b_stt: result[0]?.b_stt,
+			tax_type: result[0].tax_type_cd === '' ? '' : result[0]?.tax_type,
+			tax_type_cd: result[0]?.tax_type_cd,
+			tax_type_change_dt: result[0]?.tax_type_change_dt,
+			invoice_apply_dt: result[0]?.invoice_apply_dt,
+			end_dt: result[0]?.end_dt,
+			utcc_yn: result[0]?.utcc_yn,
+		}
+
+	}
+	res.render('state/stateApiResult', props)
+})
+
 
 //		case 'valid_multi':
 //			console.log('ppp: ', req.body)

@@ -14,15 +14,7 @@
 				<table>
 					<tr>
 						<td>사업자 번호</td>
-						<td><%= params.b_no %></td>
-					</tr>
-					<tr>
-						<td>대표명</td>
-						<td><%= params.p_nm %></td>
-					</tr>
-					<tr>
-						<td>사업 개시일</td>
-						<td><%= params.start_dt %></td>
+						<td><%= params %></td>
 					</tr>
 				</table>
 			</div>
@@ -30,12 +22,11 @@
 				<h1>조회 결과</h1>
 				<table>
 					<tr>
-						<td>진위여부</td>
-						<td id="validResult"><%= isValid %></td>
+						<td id="stateResult"><%= isRegistered %></td>
 					</tr>
 				</table>
 			</div>
-			<% if(result.b_stt !== undefined) { %>
+			<% if(result.b_stt !== '') { %>
 			<div class="resultDetailTable">
 				<h1>조회 결과 상세</h1>
 				<table>
@@ -71,7 +62,7 @@
 			</div>
 			<% } else { %>
 			<div id="quote">
-				<%- include('./quote.ejs') %>
+				<%- include('../quote.ejs') %>
 			</div>
 			<% } %>
 
@@ -82,6 +73,6 @@
 		<div id="contact">
 			<p>제작자 문의</p>
 		</div>
-		<script src='/javascripts/validResult.js'></script>
+		<script src='/javascripts/stateApiResult.js'></script>
 	</body>
 </html>

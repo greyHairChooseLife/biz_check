@@ -53,36 +53,6 @@ document.getElementById('stateMultiBtn').addEventListener('click', () => {
 })
 
 
-////////////////////////////// 
-////////////////////////////// 		API REQUEST BUTTONS CLICK
-////////////////////////////// 
-////////////////////////////// 
-
-reqAPIBtn.addEventListener('click', () => {
-	//	클라이언트에서 해 줄 일은 
-	//	1. stateating, sanitizing
-	//	2. form.post를 submit (서버단에서 처리하고 res할 수 있도록)
-	const parsedURL = requestForm.action.split('/');
-
-	switch(parsedURL[parsedURL.length -1]) {
-		case 'state_single':
-			if(requestForm.businessNumber.value === '') {
-				alert('사업자 번호를 입력 해 주세요.')
-			} else {
-				requestForm.submit();
-			}
-			break;
-
-		case 'state_multi':
-			if(!isOverLimit) requestForm.submit();
-			break;
-		default:
-			console.log('action href is NOT defined')
-			console.log('form: ', requestForm)
-	}
-})
-
-
 //////////////////////////////
 ////////////////////////////// 		LIMIT UPLOAD SIZE : TO AVOID ERROR(OUT OF MEMORY) SINCE IT IS USING BUFFER
 //////////////////////////////
