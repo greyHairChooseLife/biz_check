@@ -12,8 +12,7 @@
     <input id="filename_state" value="" placeholder="첨부파일">
     <input type="file" id="fileInput_state" name="selectedFile" form="reqAPIForm" />
 
-	<form action="/downloadForm" method="POST">
-		<input type="hidden" name="formCase" value="state_multi" />
+	<form action="/downloadForm/state" method="GET">
 		<button type="submit">양식 받기</button>
 	</form>
 	<p>
