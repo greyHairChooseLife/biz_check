@@ -19,22 +19,22 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use( logger(function (tokens, req, res) {
+app.use(
+logger(function (tokens, req, res) {
 	return [
-		tokens['status'](req, res),
 		tokens['date'](req, res),
+		tokens['status'](req, res),
+		tokens['referrer'](req, res),
 		'\n',
 		tokens['remote-addr'](req, res),
 		' ==> ',
 		tokens['user-agent'](req, res),
 		'\n',
-		tokens['method'](req, res),
-		tokens['url'](req, res),
-		'\n',
-		tokens['referrer'](req, res),
-		'\n',
 	].join(' ')
-}))
+})
+//morgan.format('combined', ':remote-addr as ":user-agent"\n:remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ')
+)
+//app.use(logger(''));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
