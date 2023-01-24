@@ -33,7 +33,6 @@ document.getElementById('fileInput_state').addEventListener('change', () => {
 })
 
 
-
 ////////////////////////////// 
 ////////////////////////////// 		API REQUEST BUTTONS CLICK
 ////////////////////////////// 

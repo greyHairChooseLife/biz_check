@@ -34,8 +34,18 @@ button {
 #contact {
 	grid-column: 2/3;
 	grid-row: 2/3;
+	position: relative;
+	width: 90%;
+	height: 40%;
+	left: 5%;
+	top: 30%;
 	text-align: center;
-	margin-top: 6vh;
+	border: solid 2px red;
+	border-radius: 15px;
+	display: grid;
+	place-content: center;
+	cursor: pointer;
+	font-size: 2rem;
 }
 
 #content > div:nth-of-type(1) {
@@ -454,4 +464,65 @@ td {
 
 .notSelected {
 	opacity: 0.3;
+}
+
+
+#contactDiv {
+	position: relative;
+	box-sizing: border-box;
+	width: 70%;
+	height: 80%;
+	left: 15%;
+	top: 10%;
+}
+#contactDiv > input:nth-child(1){
+	display: block;
+	height: 10%;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 2vw;
+	font-size: 1.2rem;
+	outline: none;
+}
+#contactDiv > textarea {
+	margin-top: 5%;
+	display: block;
+	height: 70%;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 2vw;
+	font-size: 1.2rem;
+	outline: none;
+}
+#contactForm input {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 20vw;
+	height: 7vh;
+	font-size: 1.7rem;
+}
+
+#backArrow {
+	position: absolute;
+	width: 9vw;
+	top: 8vh;
+	left: 2vw;
+	border: none;
+	background-color: transparent;
+	padding: 0;
+	outline: none;
+}
+#backArrow > img {
+	width: 17%;
+}
+#backArrow > span {
+	position: relative;
+	font-size: 1.5rem;
+	left: 0.5vw;
+	top: -0.5vh;
+}
+#backArrow:hover {
+	color: blue;
 }
