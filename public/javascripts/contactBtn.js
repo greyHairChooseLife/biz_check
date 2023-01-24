@@ -1,4 +1,4 @@
-const contactBtn = document.getElementById('contact');
+const contactBtn = document.getElementById('contactBtn');
 contactBtn.addEventListener('click', () => {
 	location.href = '/contact'
 })
